@@ -6,6 +6,14 @@ Fixed automatic detection of the llama.cpp path and added logging of the install
 
 Download the required llama.cpp package from [here](https://github.com/unslothai/llama.cpp/releases)
 
+Tested on the following platforms:
+Windows 64-bit + Vulkan;
+Windows 64-bit + ROCm;
+Linux 64-bit + Vulkan;
+Linux 64-bit + ROCm;
+
+But in theory, it should work on all of them.
+
 # Manual platform specification
 
 To force the selection of a platform before launching ComfyUI, set the LLAMA_BACKEND variable to one of the following values: "vulkan", "cuda", "rocm", "cpu", or "metal".
