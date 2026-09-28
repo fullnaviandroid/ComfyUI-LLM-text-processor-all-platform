@@ -7,10 +7,14 @@ Fixed automatic detection of the llama.cpp path and added logging of the install
 Download the required llama.cpp package from [here](https://github.com/unslothai/llama.cpp/releases)
 
 Tested on the following platforms:
-Windows 64-bit + Vulkan;
-Windows 64-bit + ROCm;
-Linux 64-bit + Vulkan;
-Linux 64-bit + ROCm;
+
+Windows 64-bit + Vulkan (Radeon RX 590);
+
+Windows 64-bit + ROCm (Radeon RX 6700 XT);
+
+Linux 64-bit + Vulkan (Radeon RX 590);
+
+Linux 64-bit + ROCm (Radeon RX 6700 XT); 
 
 But in theory, it should work on all of them.
 
