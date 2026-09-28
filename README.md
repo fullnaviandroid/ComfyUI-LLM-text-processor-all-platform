@@ -48,7 +48,7 @@ ComfyUI. It discovers local GGUF models from `ComfyUI/models/LLM`, and it can
 also accept a single image or a ComfyUI image batch for multimodal models that
 use an external `mmproj`.
 
-![Node UI](https://raw.githubusercontent.com/KingManiya/ComfyUI-LLM-text-processor/refs/heads/images/images/node.png)
+![Node UI](https://raw.githubusercontent.com/KingManiya//refs/heads/images/images/node.png)
 
 ## Features
 
@@ -87,17 +87,12 @@ Notes:
 
 ## Installation
 
-### ComfyUI Manager
-
-Open ComfyUI Manager, choose `Install Custom Nodes`, search for
-`LLM Text Processor`, install it, then restart ComfyUI.
-
 ### Manual Git Clone
 
 Open a terminal in `ComfyUI/custom_nodes` and run:
 
 ```bash
-git clone https://github.com/KingManiya/ComfyUI-LLM-text-processor.git
+git clone https://github.com/KingManiya/ComfyUI-LLM-text-processor-all-platform.git ComfyUI-LLM-text-processor
 ```
 
 Restart ComfyUI. The node appears under:
