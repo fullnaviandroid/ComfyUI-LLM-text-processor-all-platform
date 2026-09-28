@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import fnmatch
 import json
 import platform
@@ -23,6 +24,7 @@ class PlatformSpec:
     cli_executable: str
     asset_patterns: tuple[str, ...]
     required_files: tuple[str, ...]
+    auto_download: bool = False
 
 
 @dataclass(frozen=True)
@@ -42,18 +44,95 @@ WINDOWS_CUDA_13 = PlatformSpec(
         "ggml-cuda.dll",
         "cudart64_13.dll",
     ),
+    auto_download=True,
+)
+WINDOWS_VULKAN = PlatformSpec(
+    key="win-x64-vulkan",
+    cli_executable="llama-cli.exe",
+    asset_patterns=(),
+    required_files=("llama-cli.exe",),
 )
 
+WINDOWS_CPU = PlatformSpec(
+    key="win-x64-cpu",
+    cli_executable="llama-cli.exe",
+    asset_patterns=(),
+    required_files=("llama-cli.exe",),
+)
+
+# Linux
+LINUX_ROCM = PlatformSpec(
+    key="linux-rocm",
+    cli_executable="llama-cli",
+    asset_patterns=(),
+    required_files=("llama-cli",),
+)
+
+LINUX_VULKAN = PlatformSpec(
+    key="linux-vulkan",
+    cli_executable="llama-cli",
+    asset_patterns=(),
+    required_files=("llama-cli",),
+)
+
+LINUX_CUDA = PlatformSpec(
+    key="linux-cuda",
+    cli_executable="llama-cli",
+    asset_patterns=(),
+    required_files=("llama-cli",),
+)
+
+LINUX_CPU = PlatformSpec(
+    key="linux-cpu",
+    cli_executable="llama-cli",
+    asset_patterns=(),
+    required_files=("llama-cli",),
+)
+
+# macOS
+MACOS_METAL = PlatformSpec(
+    key="macos-metal",
+    cli_executable="llama-cli",
+    asset_patterns=(),
+    required_files=("llama-cli",),
+)
+
+MACOS_CPU = PlatformSpec(
+    key="macos-cpu",
+    cli_executable="llama-cli",
+    asset_patterns=(),
+    required_files=("llama-cli",),
+)
 
 def _platform_spec() -> PlatformSpec:
     system = platform.system().lower()
     machine = platform.machine().lower()
+    
+    # Пользователь может явно указать backend через переменную окружения
+    backend = os.environ.get("LLAMA_BACKEND", "").lower()
+    
     if system == "windows" and machine in {"amd64", "x86_64"}:
-        return WINDOWS_CUDA_13
-    raise RuntimeError(
-        "Automatic llama.cpp binary download currently supports Windows x64 CUDA 13 only. "
-        "Other platforms are intentionally isolated behind the platform mapping for future support."
-    )
+        if backend == "vulkan":
+            return WINDOWS_VULKAN
+        if backend == "cpu":
+            return WINDOWS_CPU
+        return WINDOWS_CUDA_13  # default
+    
+    if system == "linux" and machine in {"amd64", "x86_64"}:
+        if backend == "vulkan":
+            return LINUX_VULKAN
+        if backend == "cuda":
+            return LINUX_CUDA
+        if backend == "cpu":
+            return LINUX_CPU
+        return LINUX_ROCM  # default
+    
+    if system == "darwin":
+        if backend == "cpu":
+            return MACOS_CPU
+        return MACOS_METAL  # default
+    
+    raise RuntimeError(f"Unsupported platform: {system}/{machine}")
 
 
 def _json_get(url: str) -> dict:
@@ -195,6 +274,21 @@ def ensure_llama_cli_paths() -> LlamaCliPaths:
     if existing is not None:
         return existing
 
+    # Автозагрузка только для платформ с auto_download=True
+    if not spec.auto_download:
+        install_dir = VENDOR_ROOT / LLAMA_CPP_RELEASE_TAG / spec.key
+        missing = [
+            name for name in spec.required_files
+            if not any(path.is_file() for path in install_dir.rglob(name))
+        ]
+        raise RuntimeError(
+            f"llama.cpp binaries not found for platform '{spec.key}'.\n"
+            f"Expected location: {install_dir}\n"
+            f"Missing files: {', '.join(missing) if missing else 'unknown'}\n"
+            f"Please place llama-cli (and its .so libraries) manually in that folder."
+        )
+
+    # Автозагрузка для Windows CUDA 13
     release = _json_get(RELEASE_API_URL)
     tag = release.get("tag_name") or LLAMA_CPP_RELEASE_TAG
     install_dir = VENDOR_ROOT / tag / spec.key
