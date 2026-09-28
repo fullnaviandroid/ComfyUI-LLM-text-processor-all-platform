@@ -10,14 +10,17 @@ Download the required llama.cpp package from [here](https://github.com/unslothai
 
 To force the selection of a platform before launching ComfyUI, set the LLAMA_BACKEND variable to one of the following values: "vulkan", "cuda", "rocm", "cpu", or "metal".
 
+CMD
 ```bat
 set LLAMA_BACKEND=vulkan
 ```
 
+PowerShell
 ```PowerShell
 $env:LLAMA_BACKEND="vulkan"
 ```
 
+Linux
 ```bash
 export LLAMA_BACKEND=rocm
 ```
