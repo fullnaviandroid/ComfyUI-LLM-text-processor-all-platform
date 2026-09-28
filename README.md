@@ -2,6 +2,8 @@
 
 Fixed automatic detection of the llama.cpp path and added logging of the installation path if it is missing.
 
+![No found](https://github.com/fullnaviandroid/ComfyUI-LLM-text-processor-all-platform/blob/main/images/bug.png)
+
 # ComfyUI LLM Text Processor
 
 Process text and images with GGUF LLMs in ComfyUI using llama.cpp, including
