@@ -6,6 +6,22 @@ Fixed automatic detection of the llama.cpp path and added logging of the install
 
 Download the required llama.cpp package from [here](https://github.com/unslothai/llama.cpp/releases)
 
+#Manual platform specification
+
+To force the selection of a platform before launching ComfyUI, set the LLAMA_BACKEND variable to one of the following values: "vulkan", "cuda", "rocm", "cpu", or "metal".
+
+```bat
+set LLAMA_BACKEND=vulkan
+```
+
+```PowerShell
+$env:LLAMA_BACKEND="vulkan"
+```
+
+```bash
+export LLAMA_BACKEND=rocm
+```
+
 # ComfyUI LLM Text Processor
 
 Process text and images with GGUF LLMs in ComfyUI using llama.cpp, including
