@@ -1,3 +1,7 @@
+# Fixed bugs
+
+Fixed automatic detection of the llama.cpp path and added logging of the installation path if it is missing.
+
 # ComfyUI LLM Text Processor
 
 Process text and images with GGUF LLMs in ComfyUI using llama.cpp, including
